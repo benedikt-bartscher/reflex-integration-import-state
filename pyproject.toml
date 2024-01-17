@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "reflex-integration-import-state"
+name = "integration"
 version = "0.1.0"
 description = ""
 authors = ["Benedikt Bartscher <bb@senbax.de>"]
