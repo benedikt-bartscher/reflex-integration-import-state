@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-reflex = "^0.3.8"
+reflex = {path = "../reflex", develop = true}
 selenium = "^4.16.0"
 pytest-asyncio = "^0.23.3"
 pytest = "^7.4.4"

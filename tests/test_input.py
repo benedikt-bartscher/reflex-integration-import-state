@@ -14,7 +14,7 @@ def FullyControlledInput():
     import reflex as rx
     from reflex_integration_import_state.state import ReuseableAppState
 
-    class State(rx.State):
+    class State(ReuseableAppState):
         text: str = "initial"
 
     app = rx.App(state=rx.State)

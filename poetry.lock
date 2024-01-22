@@ -1039,42 +1039,44 @@ name = "reflex"
 version = "0.3.8"
 description = "Web apps in pure Python."
 optional = false
-python-versions = ">=3.8,<4.0"
-files = [
-    {file = "reflex-0.3.8-py3-none-any.whl", hash = "sha256:98d1051750a10edf071972020968583c2f1a8239a0e227ff44ebc05a745ac675"},
-    {file = "reflex-0.3.8.tar.gz", hash = "sha256:ae09c3db76c6fd506aaf761f6c6a14c951b7915595e4763f694f02025133de86"},
-]
+python-versions = "^3.8"
+files = []
+develop = true
 
 [package.dependencies]
-alembic = ">=1.11.1,<2.0.0"
-charset-normalizer = ">=3.3.2,<4.0.0"
-cloudpickle = ">=2.2.1,<3.0.0"
-distro = {version = ">=1.8.0,<2.0.0", markers = "sys_platform == \"linux\""}
-fastapi = ">=0.96.0,<0.97.0"
-gunicorn = ">=20.1.0,<21.0.0"
-httpx = ">=0.24.0,<0.26.0"
-jinja2 = ">=3.1.2,<4.0.0"
-packaging = ">=23.1,<24.0"
-pipdeptree = ">=2.13.0,<3.0.0"
-platformdirs = ">=3.10.0,<4.0.0"
-psutil = ">=5.9.4,<6.0.0"
-pydantic = ">=1.10.2,<2.0.0"
+alembic = "^1.11.1"
+charset-normalizer = "^3.3.2"
+cloudpickle = "^2.2.1"
+distro = {version = "^1.8.0", markers = "sys_platform == \"linux\""}
+fastapi = "^0.96.0"
+gunicorn = "^20.1.0"
+httpx = ">=0.24.0, <0.26.0"
+jinja2 = "^3.1.2"
+packaging = "^23.1"
+pipdeptree = "^2.13.0"
+platformdirs = "^3.10.0"
+psutil = "^5.9.4"
+pydantic = "^1.10.2"
 python-engineio = "!=4.6.0"
-python-multipart = ">=0.0.5,<0.0.6"
-python-socketio = ">=5.7.0,<6.0.0"
-redis = ">=4.3.5,<5.0.0"
+python-multipart = "^0.0.5"
+python-socketio = "^5.7.0"
+redis = "^4.3.5"
 reflex-hosting-cli = ">=0.1.2"
-rich = ">=13.0.0,<14.0.0"
-sqlmodel = ">=0.0.14,<0.0.15"
-starlette-admin = ">=0.9.0,<0.10.0"
+rich = "^13.0.0"
+sqlmodel = "^0.0.14"
+starlette-admin = "^0.9.0"
 typer = ">=0.4.2,<1"
 uvicorn = [
     {version = ">=0.24.0,<0.25.0", markers = "python_version >= \"3.12\""},
     {version = ">=0.20.0,<0.21.0", markers = "python_version < \"3.12\""},
 ]
-watchdog = ">=2.3.1,<3.0.0"
-watchfiles = ">=0.19.0,<0.20.0"
-wrapt = {version = ">=1.14.0,<2.0.0", markers = "python_version >= \"3.11\""}
+watchdog = "^2.3.1"
+watchfiles = "^0.19.0"
+wrapt = {version = "^1.14.0", markers = "python_version >= \"3.11\""}
+
+[package.source]
+type = "directory"
+url = "../reflex"
 
 [[package]]
 name = "reflex-hosting-cli"
@@ -1764,4 +1766,4 @@ requests = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "af97c7ab4f18a68cdf095faa78e208f46bc95149879f4090728c67ed1e11f848"
+content-hash = "6fccfb9438864eb4047c92deaff63d6ab3d593008c29c9791dba9d385905db2f"
