@@ -5,65 +5,54 @@ poetry install
 poetry run pytest tests
 ```
 
-## traceback
+## pytest output
 
 ```python
-Traceback (most recent call last):
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 1116, in _process_event
-    yield state._as_state_update(handler, events, final=True)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 1062, in _as_state_update
-    delta = state.get_delta()
-            ^^^^^^^^^^^^^^^^^
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 1186, in get_delta
-    delta.update(substates[substate].get_delta())
-                 ~~~~~~~~~^^^^^^^^^^
-KeyError: 'reuseable_app_state'
+cls = <class 'fullycontrolledinput.fullycontrolledinput.State'>, kwargs = {}, is_testing_env = False
+parent_state = <class 'reflex_integration_import_state.state.ReuseableAppState'>
 
----------------------------------------------------------------------------- Captured stderr call ----------------------------------------------------------------------------
-INFO:     ('127.0.0.1', 54288) - "WebSocket /?EIO=4&transport=websocket" [accepted]
-INFO:     connection open
------------------------------------------------------------------------------ Captured log call ------------------------------------------------------------------------------
-ERROR    asyncio:base_events.py:1771 Task exception was never retrieved
-future: <Task finished name='Task-25' coro=<AsyncServer._handle_event_internal() done, defined at /home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/socketio/async_server.py:605> exception=KeyError('reuseable_app_state')>
-Traceback (most recent call last):
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 1116, in _process_event
-    yield state._as_state_update(handler, events, final=True)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 1062, in _as_state_update
-    delta = state.get_delta()
-            ^^^^^^^^^^^^^^^^^
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 1186, in get_delta
-    delta.update(substates[substate].get_delta())
-                 ~~~~~~~~~^^^^^^^^^^
-KeyError: 'reuseable_app_state'
+    @classmethod
+    def __init_subclass__(cls, **kwargs):
+        """Do some magic for the subclass initialization.
 
-During handling of the above exception, another exception occurred:
+        Args:
+            **kwargs: The kwargs to pass to the pydantic init_subclass method.
 
-Traceback (most recent call last):
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/socketio/async_server.py", line 607, in _handle_event_internal
-    r = await server._trigger_event(data[0], namespace, sid, *data[1:])
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/socketio/async_server.py", line 643, in _trigger_event
-    return await handler.trigger_event(event, *args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/socketio/async_namespace.py", line 37, in trigger_event
-    ret = await handler(*args)
-          ^^^^^^^^^^^^^^^^^^^^
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/app.py", line 1113, in on_event
-    async for update in process(self.app, event, sid, headers, client_ip):
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/app.py", line 928, in process
-    async for update in state._process(event):
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 997, in _process
-    async for update in self._process_event(
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 1122, in _process_event
-    yield state._as_state_update(
-          ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 1062, in _as_state_update
-    delta = state.get_delta()
-            ^^^^^^^^^^^^^^^^^
-  File "/home/bb/.cache/pypoetry/virtualenvs/reflex-integration-import-state-h_rutTEK-py3.11/lib/python3.11/site-packages/reflex/state.py", line 1186, in get_delta
-    delta.update(substates[substate].get_delta())
-                 ~~~~~~~~~^^^^^^^^^^
-KeyError: 'reuseable_app_state'
+        Raises:
+            ValueError: If a substate class shadows another.
+        """
+        is_testing_env = constants.PYTEST_CURRENT_TEST in os.environ
+        super().__init_subclass__(**kwargs)
+        # Event handlers should not shadow builtin state methods.
+        cls._check_overridden_methods()
+
+        # Reset subclass tracking for this class.
+        cls.class_subclasses = set()
+
+        # Get the parent vars.
+        parent_state = cls.get_parent_state()
+        if parent_state is not None:
+            cls.inherited_vars = parent_state.vars
+            cls.inherited_backend_vars = parent_state.backend_vars
+
+            # Check if another substate class with the same name has already been defined.
+            if cls.__name__ in set(c.__name__ for c in parent_state.class_subclasses):
+                if is_testing_env:
+                    # Clear existing subclass with same name when app is reloaded via
+                    # utils.prerequisites.get_app(reload=True)
+                    parent_state.class_subclasses = set(
+                        c
+                        for c in parent_state.class_subclasses
+                        if c.__name__ != cls.__name__
+                    )
+                else:
+                    # During normal operation, subclasses cannot have the same name, even if they are
+                    # defined in different modules.
+>                   raise ValueError(
+                        f"The substate class '{cls.__name__}' has been defined multiple times. "
+                        "Shadowing substate classes is not allowed."
+                    )
+E                   ValueError: The substate class 'State' has been defined multiple times. Shadowing substate classes is not allowed.
+
+../reflex/reflex/state.py:308: ValueError
 ```
