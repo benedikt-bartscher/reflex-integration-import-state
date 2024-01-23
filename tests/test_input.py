@@ -12,9 +12,9 @@ from reflex.testing import AppHarness
 def FullyControlledInput():
     """App using a fully controlled input with implicit debounce wrapper."""
     import reflex as rx
-    from reflex_integration_import_state.state import ReuseableAppTestState
+    from reflex_integration_import_state.state import ReuseableAppState
 
-    class TestState(ReuseableAppTestState):
+    class TestState(ReuseableAppState):
         text: str = "initial"
 
     #  class TestState(rx.TestState):
@@ -26,7 +26,9 @@ def FullyControlledInput():
     def index():
         return rx.fragment(
             rx.input(
-                value=TestState.router.session.client_token, is_read_only=True, id="token"
+                value=TestState.router.session.client_token,
+                is_read_only=True,
+                id="token",
             ),
             rx.input(
                 id="debounce_input_input",
