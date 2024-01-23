@@ -11,7 +11,7 @@ from reflex.testing import AppHarness
 
 
 @pytest.fixture()
-def fully_controlled_input_module(tmp_path) -> Generator[AppHarness, None, None]:
+def fully_controlled_input_module2(tmp_path) -> Generator[AppHarness, None, None]:
     """Start FullyControlledInput app at tmp_path via AppHarness.
 
     Args:
@@ -31,21 +31,21 @@ def fully_controlled_input_module(tmp_path) -> Generator[AppHarness, None, None]
 
 
 @pytest.mark.asyncio
-async def test_fully_controlled_input_module(fully_controlled_input_module: AppHarness):
+async def test_fully_controlled_input_module2(fully_controlled_input_module2: AppHarness):
     """Type text after moving cursor. Update text on backend.
 
     Args:
         fully_controlled_input_module: harness for FullyControlledInput app
     """
-    assert fully_controlled_input_module.app_instance is not None, "app is not running"
-    driver = fully_controlled_input_module.frontend()
+    assert fully_controlled_input_module2.app_instance is not None, "app is not running"
+    driver = fully_controlled_input_module2.frontend()
 
     # get a reference to the connected client
     token_input = driver.find_element(By.ID, "token")
     assert token_input
 
     # wait for the backend connection to send the token
-    token = fully_controlled_input_module.poll_for_value(token_input)
+    token = fully_controlled_input_module2.poll_for_value(token_input)
     assert token
 
     return
